@@ -170,28 +170,31 @@ function* run() {
     oplog.on('end', () => {
       console.log(moment().format('YYYY-MM-DD HH:mm:ss'), chalk.red('MongoDB oplog finished'));
     });
-    oplog.on('data', data => {
-      if (['n'].includes(data.op)) {
-        return;
-      }
-      if (data.ns.startsWith('admin.') || data.ns.startsWith('config.')) {
-        return;
-      }
-      const ops = {
-        c: 'createCollection',
-        d: 'delete',
-        i: 'insert',
-        u: 'update'
-      };
-      const op = ops[data.op] || data.op;
 
-      let o = prettyjson.render(JSON.parse(JSON.stringify(data.o)));
-      if ('o2' in data) {
-        o = `${prettyjson.render(JSON.parse(JSON.stringify(data.o2)))} ${o}`;
-      }
-      console.log(chalk.blue(moment().format('YYYY-MM-DD HH:mm:ss')), data.ns, op);
-      console.log(o);
-    });
+    // Không in ra màn hình nữa.
+    // oplog.on('data', data => {
+      // return
+      // if (['n'].includes(data.op)) {
+      //   return;
+      // }
+      // if (data.ns.startsWith('admin.') || data.ns.startsWith('config.')) {
+      //   return;
+      // }
+      // const ops = {
+      //   c: 'createCollection',
+      //   d: 'delete',
+      //   i: 'insert',
+      //   u: 'update'
+      // };
+      // const op = ops[data.op] || data.op;
+
+      // let o = prettyjson.render(JSON.parse(JSON.stringify(data.o)));
+      // if ('o2' in data) {
+      //   o = `${prettyjson.render(JSON.parse(JSON.stringify(data.o2)))} ${o}`;
+      // }
+      // console.log(chalk.blue(moment().format('YYYY-MM-DD HH:mm:ss')), data.ns, op);
+      // console.log(o);
+    // });
     oplog.on('error', err => {
       console.log(chalk.red(moment().format('YYYY-MM-DD HH:mm:ss')), chalk.red(`Oplog error: ${err.stack}`));
     });
